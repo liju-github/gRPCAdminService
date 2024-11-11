@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package admin;
+option go_package = "proto/admin";
+
+
+service AdminService{
+    rpc BanUser(BanUserRequest) returns (BanUserResponse);
+    rpc UnBanUser(UnBanUserRequest) returns (UnBanUserResponse);
+}
+
+
+message BanUserRequest {
+  string userId = 1;
+}
+message BanUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message UnBanUserRequest{
+  string userId = 1;
+}
+message UnBanUserResponse{
+  bool success = 1;
+  string message = 2;
+}
