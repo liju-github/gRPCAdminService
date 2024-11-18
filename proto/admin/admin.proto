@@ -5,10 +5,47 @@ option go_package = "proto/admin";
 
 
 service AdminService{
+    rpc AdminLogin(AdminLoginRequest) returns (AdminLoginResponse);
     rpc BanUser(BanUserRequest) returns (BanUserResponse);
     rpc UnBanUser(UnBanUserRequest) returns (UnBanUserResponse);
+    rpc GetAllFlaggedQuestions(GetFlaggedQuestionsRequest) returns (GetFlaggedQuestionsResponse);
+    rpc GetAllFlaggedAnswers(GetFlaggedAnswersRequest) returns (GetFlaggedAnswersResponse);
+    rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
+
 }
 
+message GetAllUsersRequest{}
+
+message GetAllUsersResponse {
+  bool success  = 1;
+  repeated User users = 2;
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  string password_hash = 3;
+  string name = 4;
+  string street_name = 5;
+  string locality = 6;
+  string state = 7;
+  string pincode = 8;
+  string phone_number = 9;
+  int32 reputation = 10;
+  string verification_code = 11;
+  bool is_banned = 12;
+  bool is_verified = 13;
+}
+
+message AdminLoginRequest{
+  string username = 1;
+  string password = 2;
+}
+
+message AdminLoginResponse{
+  bool success = 1;
+  string token = 2;
+}
 
 message BanUserRequest {
   string userId = 1;
@@ -24,4 +61,47 @@ message UnBanUserRequest{
 message UnBanUserResponse{
   bool success = 1;
   string message = 2;
+}
+
+
+message GetFlaggedQuestionsRequest {
+    int32 pageNumber = 1;              
+    int32 pageSize = 2;                
+}
+
+message GetFlaggedQuestionsResponse {
+    repeated Question flaggedQuestions = 1; 
+    int32 totalFlaggedQuestions = 2;  
+}
+
+message GetFlaggedAnswersRequest {
+    int32 pageNumber = 1;              
+    int32 pageSize = 2;                
+}
+
+message GetFlaggedAnswersResponse {
+    repeated Answer flaggedAnswers = 1; 
+    int32 totalFlaggedAnswers = 2;    
+}
+
+message Question {
+    string questionID = 1; 
+    string question = 2; 
+    string userID = 3; 
+    int64 createdAt = 4; 
+    repeated string tags = 5; 
+    bool isAnswered = 6; 
+    string details = 7;
+}
+
+message Answer {
+    string id = 1;                     
+    string questionId = 2;             
+    string userId = 3;                 
+    string answerText = 4;             
+    int32 upvotes = 5;                 
+    int32 downvotes = 6;               
+    bool isFlagged = 7;                
+    int64 createdAt = 8; 
+    int64 updatedAt = 9; 
 }

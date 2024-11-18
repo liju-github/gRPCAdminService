@@ -179,20 +179,14 @@ message Answer {
     int64 updatedAt = 9; 
 }
 
-message GetFlaggedQuestionsRequest {
-    int32 pageNumber = 1;              
-    int32 pageSize = 2;                
-}
+message GetFlaggedQuestionsRequest {}
 
 message GetFlaggedQuestionsResponse {
     repeated Question flaggedQuestions = 1; 
     int32 totalFlaggedQuestions = 2;  
 }
 
-message GetFlaggedAnswersRequest {
-    int32 pageNumber = 1;              
-    int32 pageSize = 2;                
-}
+message GetFlaggedAnswersRequest {}
 
 message GetFlaggedAnswersResponse {
     repeated Answer flaggedAnswers = 1; 

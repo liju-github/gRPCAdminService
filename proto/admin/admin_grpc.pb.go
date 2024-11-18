@@ -19,16 +19,24 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AdminService_BanUser_FullMethodName   = "/admin.AdminService/BanUser"
-	AdminService_UnBanUser_FullMethodName = "/admin.AdminService/UnBanUser"
+	AdminService_AdminLogin_FullMethodName             = "/admin.AdminService/AdminLogin"
+	AdminService_BanUser_FullMethodName                = "/admin.AdminService/BanUser"
+	AdminService_UnBanUser_FullMethodName              = "/admin.AdminService/UnBanUser"
+	AdminService_GetAllFlaggedQuestions_FullMethodName = "/admin.AdminService/GetAllFlaggedQuestions"
+	AdminService_GetAllFlaggedAnswers_FullMethodName   = "/admin.AdminService/GetAllFlaggedAnswers"
+	AdminService_GetAllUsers_FullMethodName            = "/admin.AdminService/GetAllUsers"
 )
 
 // AdminServiceClient is the client API for AdminService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminServiceClient interface {
+	AdminLogin(ctx context.Context, in *AdminLoginRequest, opts ...grpc.CallOption) (*AdminLoginResponse, error)
 	BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*BanUserResponse, error)
 	UnBanUser(ctx context.Context, in *UnBanUserRequest, opts ...grpc.CallOption) (*UnBanUserResponse, error)
+	GetAllFlaggedQuestions(ctx context.Context, in *GetFlaggedQuestionsRequest, opts ...grpc.CallOption) (*GetFlaggedQuestionsResponse, error)
+	GetAllFlaggedAnswers(ctx context.Context, in *GetFlaggedAnswersRequest, opts ...grpc.CallOption) (*GetFlaggedAnswersResponse, error)
+	GetAllUsers(ctx context.Context, in *GetAllUsersRequest, opts ...grpc.CallOption) (*GetAllUsersResponse, error)
 }
 
 type adminServiceClient struct {
@@ -37,6 +45,16 @@ type adminServiceClient struct {
 
 func NewAdminServiceClient(cc grpc.ClientConnInterface) AdminServiceClient {
 	return &adminServiceClient{cc}
+}
+
+func (c *adminServiceClient) AdminLogin(ctx context.Context, in *AdminLoginRequest, opts ...grpc.CallOption) (*AdminLoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminLoginResponse)
+	err := c.cc.Invoke(ctx, AdminService_AdminLogin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *adminServiceClient) BanUser(ctx context.Context, in *BanUserRequest, opts ...grpc.CallOption) (*BanUserResponse, error) {
@@ -59,12 +77,46 @@ func (c *adminServiceClient) UnBanUser(ctx context.Context, in *UnBanUserRequest
 	return out, nil
 }
 
+func (c *adminServiceClient) GetAllFlaggedQuestions(ctx context.Context, in *GetFlaggedQuestionsRequest, opts ...grpc.CallOption) (*GetFlaggedQuestionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFlaggedQuestionsResponse)
+	err := c.cc.Invoke(ctx, AdminService_GetAllFlaggedQuestions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminServiceClient) GetAllFlaggedAnswers(ctx context.Context, in *GetFlaggedAnswersRequest, opts ...grpc.CallOption) (*GetFlaggedAnswersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFlaggedAnswersResponse)
+	err := c.cc.Invoke(ctx, AdminService_GetAllFlaggedAnswers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminServiceClient) GetAllUsers(ctx context.Context, in *GetAllUsersRequest, opts ...grpc.CallOption) (*GetAllUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllUsersResponse)
+	err := c.cc.Invoke(ctx, AdminService_GetAllUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility.
 type AdminServiceServer interface {
+	AdminLogin(context.Context, *AdminLoginRequest) (*AdminLoginResponse, error)
 	BanUser(context.Context, *BanUserRequest) (*BanUserResponse, error)
 	UnBanUser(context.Context, *UnBanUserRequest) (*UnBanUserResponse, error)
+	GetAllFlaggedQuestions(context.Context, *GetFlaggedQuestionsRequest) (*GetFlaggedQuestionsResponse, error)
+	GetAllFlaggedAnswers(context.Context, *GetFlaggedAnswersRequest) (*GetFlaggedAnswersResponse, error)
+	GetAllUsers(context.Context, *GetAllUsersRequest) (*GetAllUsersResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -75,11 +127,23 @@ type AdminServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAdminServiceServer struct{}
 
+func (UnimplementedAdminServiceServer) AdminLogin(context.Context, *AdminLoginRequest) (*AdminLoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AdminLogin not implemented")
+}
 func (UnimplementedAdminServiceServer) BanUser(context.Context, *BanUserRequest) (*BanUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BanUser not implemented")
 }
 func (UnimplementedAdminServiceServer) UnBanUser(context.Context, *UnBanUserRequest) (*UnBanUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnBanUser not implemented")
+}
+func (UnimplementedAdminServiceServer) GetAllFlaggedQuestions(context.Context, *GetFlaggedQuestionsRequest) (*GetFlaggedQuestionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllFlaggedQuestions not implemented")
+}
+func (UnimplementedAdminServiceServer) GetAllFlaggedAnswers(context.Context, *GetFlaggedAnswersRequest) (*GetFlaggedAnswersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllFlaggedAnswers not implemented")
+}
+func (UnimplementedAdminServiceServer) GetAllUsers(context.Context, *GetAllUsersRequest) (*GetAllUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllUsers not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 func (UnimplementedAdminServiceServer) testEmbeddedByValue()                      {}
@@ -100,6 +164,24 @@ func RegisterAdminServiceServer(s grpc.ServiceRegistrar, srv AdminServiceServer)
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&AdminService_ServiceDesc, srv)
+}
+
+func _AdminService_AdminLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).AdminLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_AdminLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).AdminLogin(ctx, req.(*AdminLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _AdminService_BanUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -138,6 +220,60 @@ func _AdminService_UnBanUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_GetAllFlaggedQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlaggedQuestionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetAllFlaggedQuestions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetAllFlaggedQuestions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetAllFlaggedQuestions(ctx, req.(*GetFlaggedQuestionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminService_GetAllFlaggedAnswers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlaggedAnswersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetAllFlaggedAnswers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetAllFlaggedAnswers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetAllFlaggedAnswers(ctx, req.(*GetFlaggedAnswersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminService_GetAllUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetAllUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetAllUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetAllUsers(ctx, req.(*GetAllUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -146,12 +282,28 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AdminServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "AdminLogin",
+			Handler:    _AdminService_AdminLogin_Handler,
+		},
+		{
 			MethodName: "BanUser",
 			Handler:    _AdminService_BanUser_Handler,
 		},
 		{
 			MethodName: "UnBanUser",
 			Handler:    _AdminService_UnBanUser_Handler,
+		},
+		{
+			MethodName: "GetAllFlaggedQuestions",
+			Handler:    _AdminService_GetAllFlaggedQuestions_Handler,
+		},
+		{
+			MethodName: "GetAllFlaggedAnswers",
+			Handler:    _AdminService_GetAllFlaggedAnswers_Handler,
+		},
+		{
+			MethodName: "GetAllUsers",
+			Handler:    _AdminService_GetAllUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

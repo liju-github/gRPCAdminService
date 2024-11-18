@@ -3,6 +3,7 @@ module github.com/liju-github/EcommerceAdminService
 go 1.22.7
 
 require (
+	github.com/joho/godotenv v1.5.1
 	google.golang.org/grpc v1.68.0
 	google.golang.org/protobuf v1.35.1
 )
